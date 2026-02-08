@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. KnAI - Creating a Category</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+      background:#0a0e27;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    }
+    .slide-container{
+      width:1920px;height:1080px;position:relative;overflow:hidden;
+      background:linear-gradient(135deg,#0a0e27 0%,#1a1f3a 100%);
+    }
+
+    /* Background */
+    .bg-glow{position:absolute;border-radius:50%;filter:blur(100px);opacity:.30;animation:float 20s ease-in-out infinite;}
+    .glow-1{width:800px;height:800px;background:radial-gradient(circle,#667eea,transparent);top:-400px;left:50%;transform:translateX(-50%);}
+    .glow-2{width:600px;height:600px;background:radial-gradient(circle,#f093fb,transparent);bottom:-300px;right:-300px;animation-delay:-10s;}
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.9)}}
+    .grid-overlay{
+      position:absolute;inset:0;background-image:
+      linear-gradient(rgba(102,126,234,.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(102,126,234,.03) 1px,transparent 1px);
+      background-size:50px 50px;animation:grid-move 10s linear infinite;
+    }
+    @keyframes grid-move{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
+
+    /* Corner logo */
+    .logo-corner{
+      position:absolute;top:40px;left:60px;width:60px;height:60px;border-radius:16px;
+      background:rgba(102,126,234,.10);backdrop-filter:blur(10px);border:2px solid rgba(102,126,234,.5);
+      display:flex;align-items:center;justify-content:center;z-index:10;overflow:hidden;
+    }
+    .logo-corner img{width:100%;height:100%;object-fit:contain}
+
+    .content{padding:120px 80px 80px;height:100%;display:flex;flex-direction:column;position:relative;z-index:5}
+
+    .slide-title{
+      font-size:56px;font-weight:800;text-align:center;margin-bottom:50px;
+      background:linear-gradient(135deg,#ffffff 0%,#94a3b8 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+      text-transform:uppercase;letter-spacing:3px;opacity:0;animation:fadeInDown .8s ease forwards;
+    }
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Quadrant plane */
+    .quadrant-container{flex:1;position:relative;max-width:1400px;margin:0 auto;width:100%;}
+    .axis{position:absolute;background:rgba(160,174,192,.55)}
+
+    /* Shorter axes so they don't run through labels */
+    .x-axis{left:12%;right:16%;height:3px;top:50%;transform:translateY(-50%)}
+    .y-axis{top:8%;bottom:8%;width:3px;left:50%;transform:translateX(-50%)}
+
+    /* Axis arrowheads */
+    .x-axis::after,.y-axis::after{content:"";position:absolute;border-style:solid;}
+    .x-axis::after{right:-8px;top:50%;transform:translateY(-50%);border-width:6px 0 6px 8px;border-color:transparent transparent transparent rgba(160,174,192,.85)}
+    /* UPWARD arrow on Y axis */
+    .y-axis::after{
+      top:-8px;left:50%;transform:translateX(-50%);
+      border-width:0 6px 8px 6px; /* up-pointing triangle */
+      border-color:transparent transparent rgba(160,174,192,.85) transparent;
+    }
+
+    /* Axis labels */
+    .axis-label{
+      position:absolute;font-weight:800;text-transform:uppercase;letter-spacing:2px;
+      color:#94a3b8;opacity:.9;font-size:clamp(16px,1.1vw,22px);
+      text-shadow:0 0 12px rgba(102,126,234,.2);
+      pointer-events:none; z-index:0;
+    }
+    .label-left{left:1.2%;top:50%;transform:translateY(-50%) rotate(-90deg);}
+    .label-right{right:1.2%;top:50%;transform:translateY(-50%) rotate(90deg);}
+    .label-top{top:1.8%;left:50%;transform:translateX(-50%);}
+    .label-bottom{bottom:1.8%;left:50%;transform:translateX(-50%);}
+
+    /* Quadrants (containers) */
+    .quadrant{position:absolute;width:50%;height:50%;}
+    .q1{left:50%;top:0;}      /* Pet-Specific × Enterprise */
+    .q2{left:0;top:0;}        /* Generic × Enterprise */
+    .q3{left:0;top:50%;}      /* Generic × Consumer */
+    .q4{left:50%;top:50%;}    /* Pet-Specific × Consumer */
+
+    /* Logo items */
+    .logo-item{
+      position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      filter:drop-shadow(0 6px 18px rgba(0,0,0,.35));
+      animation:popIn .7s ease both;
+    }
+    @keyframes popIn{from{opacity:0;transform:translate(-50%,-40%) scale(.9)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+    .logo-img{height:58px;max-width:180px;object-fit:contain}
+    .logo-caption{font-size:18px;font-weight:700;color:#cbd5e1;letter-spacing:.3px;white-space:nowrap}
+
+    /* Dr. KnAI badge (Q1) — higher */
+    .drknai-position{position:absolute;right:15%;top:10%;z-index:2;}
+    .drknai-card{
+      width:240px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,rgba(102,126,234,.18),rgba(118,75,162,.18));
+      border:2px solid rgba(102,126,234,.65);border-radius:20px;backdrop-filter:blur(16px);
+      box-shadow:0 20px 40px rgba(102,126,234,.30), 0 0 80px rgba(102,126,234,.18); animation:pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse{0%,100%{box-shadow:0 20px 40px rgba(102,126,234,.30),0 0 80px rgba(102,126,234,.18)}50%{box-shadow:0 24px 54px rgba(102,126,234,.45),0 0 120px rgba(102,126,234,.32)}}
+    .drknai-logo{font-size:30px;font-weight:900;background:linear-gradient(135deg,#a3b8ff,#b592ff,#ffb3f1);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+    .drknai-tag{font-size:12px;color:#9aa9c0;letter-spacing:1px;text-transform:uppercase}
+
+    /* Conclusion banner (unchanged) */
+    .conclusion{
+      position:absolute;left:68%;top:210px;transform:translateX(-50%) translateY(24px) scale(.98);
+      background:linear-gradient(135deg,rgba(102,126,234,.12),rgba(118,75,162,.12));
+      border:1px solid rgba(102,126,234,.35);backdrop-filter:blur(18px);
+      border-radius:20px;padding:16px 36px;opacity:0;visibility:hidden;z-index:3;
+      transition:opacity .45s ease, transform .45s ease, visibility .45s ease;
+    }
+    .conclusion.is-visible{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0) scale(1);}
+    .conclusion-text{
+      font-size:clamp(26px,1.8vw,36px);font-weight:900;text-align:center;letter-spacing:.4px;
+      background:linear-gradient(135deg,#a3b8ff,#b592ff,#ffb3f1);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+      text-shadow:0 0 18px rgba(102,126,234,.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Background -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Corner logo -->
+    <div class="logo-corner">
+      <img src="assets/LOGO.png" alt="Dr. KnAI Logo"/>
+    </div>
+
+    <div class="content">
+      <h2 class="slide-title">Beyond Competition, We're Creating a Category</h2>
+
+      <div class="quadrant-container">
+        <!-- Axes -->
+        <div class="axis x-axis"></div>
+        <div class="axis y-axis"></div>
+
+        <!-- Axis labels -->
+        <div class="axis-label label-left">Generic</div>
+        <div class="axis-label label-right">Pet-Specific</div>
+        <div class="axis-label label-top">Enterprise / B2B</div>
+        <div class="axis-label label-bottom">Consumer / B2C</div>
+
+        <!-- Quadrants with scattered logos -->
+        <!-- Q2: Generic × Enterprise -->
+        <div class="quadrant q2" aria-label="Generic Enterprise quadrant">
+          <!-- moved LOWER but keep relative ordering -->
+          <div class="logo-item" style="--x:32%; --y:30%;">
+            <img class="logo-img" src="assets/Scale_LOGO.png" alt="Scale AI logo"/>
+            <div class="logo-caption">Scale AI</div>
+          </div>
+          <div class="logo-item" style="--x:80%; --y:52%;">
+            <img class="logo-img" src="assets/Labelbox_LOGO.jpg" alt="Labelbox logo"/>
+            <div class="logo-caption">Labelbox</div>
+          </div>
+          <div class="logo-item" style="--x:54%; --y:70%;">
+            <img class="logo-img" src="assets/Appen_LOGO.png" alt="Appen logo"/>
+            <div class="logo-caption">Appen</div>
+          </div>
+        </div>
+
+        <!-- Q3: Generic × Consumer -->
+        <div class="quadrant q3" aria-label="Generic Consumer quadrant">
+          <div class="logo-item" style="--x:34%; --y:34%;">
+            <img class="logo-img" src="assets/Amazon_MTurk.png" alt="Amazon Mechanical Turk logo"/>
+            <div class="logo-caption">Amazon MTurk</div>
+          </div>
+          <div class="logo-item" style="--x:72%; --y:60%;">
+            <img class="logo-img" src="assets/Clickworker_LOGO.png" alt="Clickworker logo"/>
+            <div class="logo-caption">Clickworker</div>
+          </div>
+        </div>
+
+        <!-- Q4: Pet-Specific × Consumer -->
+        <div class="quadrant q4" aria-label="Pet-Specific Consumer quadrant">
+          <div class="logo-item" style="--x:8%; --y:22%;">
+            <img class="logo-img" src="assets/PetDesk_LOGO.png" alt="PetDesk logo"/>
+            <div class="logo-caption">PetDesk</div>
+          </div>
+          <div class="logo-item" style="--x:38%; --y:36%;">
+            <img class="logo-img" src="assets/PetCube_LOGO.jpg" alt="Petcube logo"/>
+            <div class="logo-caption">Petcube</div>
+          </div>
+          <div class="logo-item" style="--x:60%; --y:14%;">
+            <img class="logo-img" src="assets/Rover_LOGO.png" alt="Rover logo"/>
+            <div class="logo-caption">Rover</div>
+          </div>
+        </div>
+
+        <!-- Q1: Pet-Specific × Enterprise (Dr. KnAI) -->
+        <div class="quadrant q1" aria-label="Pet-Specific Enterprise quadrant"></div>
+        <div class="drknai-position">
+          <div class="drknai-card">
+            <div class="drknai-logo">Dr. KnAI</div>
+            <div class="drknai-tag">Unified Multi-Modal Pet AI</div>
+          </div>
+        </div>
+
+        <!-- Conclusion (click to reveal) -->
+        <div class="conclusion" id="conclusion">
+          <div class="conclusion-text">The Only Unified Multi-Modal Platform for Pet AI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reveal conclusion on click or keypress -->
+  <script>
+    (function(){
+      const container = document.querySelector('.slide-container');
+      const conclusion = document.getElementById('conclusion');
+      let revealed = false;
+      function reveal(){ if(revealed) return; revealed = true; conclusion.classList.add('is-visible'); }
+      container.addEventListener('click', reveal);
+      window.addEventListener('keydown', (e) => {
+        if ([' ', 'Enter', 'ArrowRight', 'PageDown'].includes(e.key)) { e.preventDefault(); reveal(); }
+      });
+    })();
+  </script>
+</body>
+</html>

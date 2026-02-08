@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. KnAI - The Ask & Use of Funds</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            padding: 20px;
+        }
+        
+        .slide-container {
+            width: 100%;
+            max-width: 1920px;
+            min-height: 1080px;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated background elements */
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.2;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .glow-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #667eea, transparent);
+            top: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .glow-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #f093fb, transparent);
+            bottom: -250px;
+            right: -250px;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        /* Grid overlay */
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        
+        /* Main content */
+        .content {
+            padding: 60px 80px;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .slide-title {
+            font-size: 60px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeInDown 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Top section with total ask and chart */
+        .top-section {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 60px;
+            margin-bottom: 50px;
+            align-items: center;
+        }
+        
+        /* Ask info section */
+        .ask-info {
+            animation: slideInLeft 0.8s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .total-ask {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 30px;
+            /* display: flex;
+            flex-wrap: wrap; /* allows other elements to wrap below if needed */
+            /* align-items: center; */
+            /* gap: 10px; */ 
+        }
+
+        .ask-top-row {
+            display: flex;
+            align-items: flex-start;   /* aligns note to top of $2.5M */
+            gap: 20px;                 /* horizontal space between $2.5M and note */
+            flex-wrap: wrap;           /* optional if the note is long */
+        }
+        
+        .ask-amount {
+            font-size: 72px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .ask-stage {
+            font-size: 24px;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        
+        .ask-timeline {
+            font-size: 24px;
+            color: #94a3b8;
+            margin-top:50px;
+            margin-left:100px;
+            font-weight: 600;
+        }
+        
+        /* Budget allocation summary */
+        .allocation-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .allocation-item {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .allocation-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .allocation-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent);
+        }
+        
+        .item-product { --accent: #667eea; }
+        .item-team { --accent: #764ba2; }
+        .item-gtm { --accent: #f093fb; }
+        .item-buffer { --accent: #10b981; }
+        
+        .allocation-label {
+            font-size: 24px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .allocation-value {
+            font-size: 32px;
+            font-weight: 900;
+        }
+        
+        .item-product .allocation-value { color: #667eea; }
+        .item-team .allocation-value { color: #764ba2; }
+        .item-gtm .allocation-value { color: #f093fb; }
+        .item-buffer .allocation-value { color: #10b981; }
+        
+        .allocation-percent {
+            font-size: 18px;
+            color: #64748b;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+        
+        /* Donut chart */
+        .chart-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 0.5s;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .donut-chart {
+            width: 350px;
+            height: 350px;
+            position: relative;
+        }
+        
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        
+        .chart-segment {
+            fill: none;
+            stroke-width: 30;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0.9;
+        }
+        
+        .chart-segment:hover {
+            stroke-width: 35;
+            opacity: 1;
+        }
+        
+        .chart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .chart-total {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .chart-label {
+            font-size: 16px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        
+        /* Quarterly breakdown timeline */
+        .timeline-section {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            margin-top: 40px;
+            animation: slideUp 0.8s ease forwards;
+            animation-delay: 0.7s;
+            opacity: 0;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .timeline-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .quarter-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .quarter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.1);
+        }
+        
+        .quarter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .quarter-label {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .quarter-months {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        
+        .quarter-budget {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+        
+        .budget-breakdown {
+            margin-bottom: 20px;
+        }
+        
+        .budget-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .budget-label {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .budget-value {
+            color: #cbd5e1;
+            font-weight: 700;
+        }
+        
+        .quarter-milestone {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+        }
+        
+        .milestone-label {
+            font-size: 12px;
+            color: #10b981;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .milestone-text {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+        
+        /* Key metrics bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(6, 182, 212, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 1s;
+            opacity: 0;
+        }
+        
+        .metric-item {
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 24px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background effects -->
+        <div class="bg-glow glow-1"></div>
+        <div class="bg-glow glow-2"></div>
+        <div class="grid-overlay"></div>
+        
+        <div class="content">
+            <h1 class="slide-title">The Ask & Use of Funds</h1>
+            
+            <!-- Top section with total ask and chart -->
+            <div class="top-section">
+                <!-- Ask info section -->
+                <div class="ask-info">
+                    <div class="total-ask">
+                        <div class="ask-top-row">
+                            <div class="ask-amount">$2.5M</div>
+                            <div class="ask-timeline">Please refer to the appendix page for the quarterly breakdown</div>
+                        </div>
+                        <div class="ask-stage">Pre-Seed Round</div>
+=                    </div>
+                    
+                    <!-- Budget allocation summary -->
+                    <div class="allocation-summary">
+                        <div class="allocation-item item-product">
+                            <div class="allocation-label">Product Development</div>
+                            <div>
+                                <span class="allocation-value">$770K</span>
+                                <span class="allocation-percent">31%</span>
+                            </div>
+                        </div>
+                        <div class="allocation-item item-team">
+                            <div class="allocation-label">Team & Operations</div>
+                            <div>
+                                <span class="allocation-value">$480K</span>
+                                <span class="allocation-percent">19%</span>
+                            </div>
+                        </div>
+                        <div class="allocation-item item-gtm">
+                            <div class="allocation-label">Go-to-Market</div>
+                            <div>
+                                <span class="allocation-value">$900K</span>
+                                <span class="allocation-percent">36%</span>
+                            </div>
+                        </div>
+                        <div class="allocation-item item-buffer">
+                            <div class="allocation-label">Buffer & Reserve</div>
+                            <div>
+                                <span class="allocation-value">$350K</span>
+                                <span class="allocation-percent">14%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Donut chart -->
+                <div class="chart-section">
+                    <div class="donut-chart">
+                        <svg class="chart-svg" viewBox="0 0 200 200">
+                            <!-- Product: 31% = 111.6 degrees -->
+                            <circle class="chart-segment" 
+                                    cx="100" cy="100" r="75" 
+                                    stroke="#667eea"
+                                    stroke-dasharray="146.6 471.24"
+                                    stroke-dashoffset="0" />
+                            <!-- Team: 19% = 68.4 degrees -->
+                            <circle class="chart-segment" 
+                                    cx="100" cy="100" r="75" 
+                                    stroke="#764ba2"
+                                    stroke-dasharray="89.5 471.24"
+                                    stroke-dashoffset="-146.6" />
+                            <!-- GTM: 36% = 129.6 degrees -->
+                            <circle class="chart-segment" 
+                                    cx="100" cy="100" r="75" 
+                                    stroke="#f093fb"
+                                    stroke-dasharray="169.6 471.24"
+                                    stroke-dashoffset="-236.1" />
+                            <!-- Buffer: 14% = 50.4 degrees -->
+                            <circle class="chart-segment" 
+                                    cx="100" cy="100" r="75" 
+                                    stroke="#10b981"
+                                    stroke-dasharray="65.9 471.24"
+                                    stroke-dashoffset="-405.7" />
+                        </svg>
+                        <div class="chart-center">
+                            <div class="chart-total">$2.5M</div>
+                            <div class="chart-label">Total Raise</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quarterly breakdown timeline
+            <div class="timeline-section">
+                <h2 class="timeline-title">24-Month Execution Timeline</h2>
+                <div class="timeline-grid">
+                    Q1-Q2
+                    <div class="quarter-card">
+                        <div class="quarter-header">
+                            <div>
+                                <div class="quarter-label">Q1–Q2</div>
+                                <div class="quarter-months">Months 0–6</div>
+                            </div>
+                        </div>
+                        <div class="quarter-budget">$600K</div>
+                        <div class="budget-breakdown">
+                            <div class="budget-item">
+                                <span class="budget-label">Product</span>
+                                <span class="budget-value">$300K</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">Team</span>
+                                <span class="budget-value">$135K</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">GTM</span>
+                                <span class="budget-value">$165K</span>
+                            </div>
+                        </div>
+                        <div class="quarter-milestone">
+                            <div class="milestone-label">Milestone</div>
+                            <div class="milestone-text">MVP completed, 2-3 pilot clinics identified</div>
+                        </div>
+                    </div>
+                    
+                    Q3-Q4
+                    <div class="quarter-card">
+                        <div class="quarter-header">
+                            <div>
+                                <div class="quarter-label">Q3–Q4</div>
+                                <div class="quarter-months">Months 7–12</div>
+                            </div>
+                        </div>
+                        <div class="quarter-budget">$625K</div>
+                        <div class="budget-breakdown">
+                            <div class="budget-item">
+                                <span class="budget-label">Product</span>
+                                <span class="budget-value">$225K</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">Team</span>
+                                <span class="budget-value">$135K</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">GTM</span>
+                                <span class="budget-value">$265K</span>
+                            </div>
+                        </div>
+                        <div class="quarter-milestone">
+                            <div class="milestone-label">Milestone</div>
+                            <div class="milestone-text">5+ clinics onboard, first enterprise client identified</div>
+                        </div>
+                    </div>
+                    
+                    Q5-Q6
+                    <div class="quarter-card">
+                        <div class="quarter-header">
+                            <div>
+                                <div class="quarter-label">Q5–Q6</div>
+                                <div class="quarter-months">Months 13–18</div>
+                            </div>
+                        </div>
+                        <div class="quarter-budget">$625K</div>
+                        <div class="budget-breakdown">
+                            <div class="budget-item">
+                                <span class="budget-label">Product</span>
+                                <span class="budget-value">$150K</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">Team</span>
+                                <span class="budget-value">$135K</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">GTM</span>
+                                <span class="budget-value">$340K</span>
+                            </div>
+                        </div>
+                        <div class="quarter-milestone">
+                            <div class="milestone-label">Milestone</div>
+                            <div class="milestone-text">20+ clinics, $100K+ ARR, PMF signals</div>
+                        </div>
+                    </div>
+                    
+                    Q7-Q8
+                    <div class="quarter-card">
+                        <div class="quarter-header">
+                            <div>
+                                <div class="quarter-label">Q7–Q8</div>
+                                <div class="quarter-months">Months 19–24</div>
+                            </div>
+                        </div>
+                        <div class="quarter-budget">$650K</div>
+                        <div class="budget-breakdown">
+                            <div class="budget-item">
+                                <span class="budget-label">Product</span>
+                                <span class="budget-value">$135K</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">Team</span>
+                                <span class="budget-value">$135K</span>
+                            </div>
+                            <div class="budget-item">
+                                <span class="budget-label">GTM</span>
+                                <span class="budget-value">$380K</span>
+                            </div>
+                        </div>
+                        <div class="quarter-milestone">
+                            <div class="milestone-label">Milestone</div>
+                            <div class="milestone-text">50+ clinics, >$500K ARR, Series A ready</div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            
+            <-- Key metrics bar -->
+            <div class="metrics-bar">
+                <div class="metric-item">
+                    <div class="metric-value">50+</div>
+                    <div class="metric-label">Target Clinics</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">$500K+</div>
+                    <div class="metric-label">ARR Target</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">5-7</div>
+                    <div class="metric-label">Team Size</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">24mo</div>
+                    <div class="metric-label">Runway</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

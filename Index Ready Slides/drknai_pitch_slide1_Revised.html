@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. KnAI - Title Slide (Dark)</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      background:#0a0e27; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden;
+    }
+    .slide-container {
+      width:1920px; height:1080px; position:relative; overflow:hidden;
+      background:linear-gradient(135deg,#0a0e27 0%, #1a1f3a 100%);
+    }
+
+    /* Animated background glows */
+    .bg-glow{ position:absolute; border-radius:50%; filter:blur(120px); opacity:.4; animation:float 20s ease-in-out infinite; }
+    .glow-1{ width:1000px; height:1000px; background:radial-gradient(circle,#667eea,transparent); top:-500px; left:-500px; }
+    .glow-2{ width:800px; height:800px; background:radial-gradient(circle,#f093fb,transparent); bottom:-400px; right:-400px; animation-delay:-10s; }
+    .glow-3{ width:600px; height:600px; background:radial-gradient(circle,#764ba2,transparent); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:-5s; opacity:.3; }
+    @keyframes float{ 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-30px) scale(1.1)} 66%{transform:translate(-20px,20px) scale(.9)} }
+
+    /* Grid overlay */
+    .grid-overlay{
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(102,126,234,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(102,126,234,.02) 1px, transparent 1px);
+      background-size:60px 60px; animation:grid-move 15s linear infinite;
+    }
+    @keyframes grid-move{ 0%{transform:translate(0,0)} 100%{transform:translate(60px,60px)} }
+
+    /* Particles */
+    .particles{ position:absolute; inset:0; overflow:hidden; }
+    .particle{ position:absolute; width:4px; height:4px; background:#667eea; border-radius:50%; opacity:.6; animation:particle-rise 25s linear infinite; }
+    @keyframes particle-rise{
+      from{ transform:translateY(100vh) translateX(0); opacity:0; }
+      10%{ opacity:.6; } 90%{ opacity:.6; }
+      to{ transform:translateY(-100vh) translateX(100px); opacity:0; }
+    }
+    .particle:nth-child(1){ left:5%;  animation-delay:0s; }
+    .particle:nth-child(2){ left:15%; animation-delay:3s;  background:#764ba2; }
+    .particle:nth-child(3){ left:25%; animation-delay:6s;  background:#f093fb; }
+    .particle:nth-child(4){ left:35%; animation-delay:9s; }
+    .particle:nth-child(5){ left:45%; animation-delay:12s; background:#f5576c; }
+    .particle:nth-child(6){ left:55%; animation-delay:15s; }
+    .particle:nth-child(7){ left:65%; animation-delay:18s; background:#764ba2; }
+    .particle:nth-child(8){ left:75%; animation-delay:21s; background:#f093fb; }
+    .particle:nth-child(9){ left:85%; animation-delay:24s; }
+    .particle:nth-child(10){ left:95%; animation-delay:27s; background:#667eea; }
+
+    /* Content */
+    .content{
+      height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:80px; position:relative; z-index:2;
+    }
+
+    /* LOGO: real image with glassy frame */
+    .logo-container{ margin-bottom:70px; opacity:0; animation:fadeInScale 1s ease forwards; }
+    @keyframes fadeInScale{ from{opacity:0; transform:scale(.8)} to{opacity:1; transform:scale(1)} }
+    .logo-frame{
+      width:220px; height:220px; padding:24px; border-radius:30px; overflow:hidden;
+      background:rgba(255,255,255,.04); backdrop-filter:blur(18px);
+      border:2px solid rgba(102,126,234,.35);
+      box-shadow:0 20px 40px rgba(102,126,234,.25), 0 0 60px rgba(102,126,234,.12);
+      display:flex; align-items:center; justify-content:center;
+      transition:transform .35s cubic-bezier(.175,.885,.32,1.275), box-shadow .35s, border-color .35s;
+    }
+    .logo-frame:hover{ transform:translateY(-6px) scale(1.04); border-color:rgba(102,126,234,.7); box-shadow:0 28px 64px rgba(102,126,234,.35), 0 0 80px rgba(102,126,234,.2); }
+    .logo-img{ width:100%; height:100%; object-fit:contain; }
+
+    /* Company name */
+    .company-name{
+      font-size:140px; font-weight:900; letter-spacing:-4px; margin-bottom:40px;
+      background:linear-gradient(135deg,#667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+      position:relative; opacity:0; animation:slideInUp .8s ease .3s forwards;
+      text-shadow:0 0 80px rgba(102,126,234,.5);
+    }
+    @keyframes slideInUp{ from{opacity:0; transform:translateY(40px)} to{opacity:1; transform:translateY(0)} }
+    .company-name::after{
+      content:'Dr. KnAI'; position:absolute; inset:0; z-index:-1;
+      background:linear-gradient(135deg,#667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+      filter:blur(40px); opacity:.5;
+    }
+
+    /* Tagline — bigger & clearer on dark */
+    .tagline-container{
+      background:rgba(255,255,255,.06); backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.16); border-radius:22px;
+      padding:34px 74px; margin-bottom:40px;
+      min-width:clamp(780px, 62vw, 1280px);
+      box-shadow:0 8px 40px rgba(102,126,234,.18), inset 0 1px 0 rgba(255,255,255,.06);
+      opacity:0; animation:fadeIn .8s ease .5s forwards;
+    }
+    @keyframes fadeIn{ to{opacity:1} }
+    .tagline{
+      font-size:clamp(42px, 3.6vw, 66px); line-height:1.15;
+      color:#e5e7eb; font-weight:800; letter-spacing:.2px; text-align:center;
+    }
+    .tagline .highlight{
+      font-weight:900; text-transform:uppercase; letter-spacing:.6px;
+      background:linear-gradient(135deg,#a3b8ff, #b592ff, #ffb3f1);
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    }
+
+    /* Founders */
+    .founders{ display:flex; gap:60px; margin-top:0px; }
+    .founder{
+      background:rgba(255,255,255,.05); backdrop-filter:blur(18px);
+      border:1px solid rgba(255,255,255,.14); border-radius:20px; padding:30px; text-align:center;
+      transition:transform .35s cubic-bezier(.175,.885,.32,1.275), box-shadow .35s, border-color .35s, background .35s;
+      opacity:0; animation:slideInUp .8s ease forwards;
+      box-shadow:0 16px 36px rgba(102,126,234,.18), 0 0 40px rgba(102,126,234,.08);
+    }
+    .founder:nth-child(1){ animation-delay:.7s; }
+    .founder:nth-child(2){ animation-delay:.9s; }
+    .founder:hover{ transform:translateY(-10px) scale(1.03); background:rgba(255,255,255,.07); border-color:rgba(102,126,234,.5); box-shadow:0 24px 54px rgba(102,126,234,.28), 0 0 70px rgba(102,126,234,.12); }
+
+    .founder-avatar{
+      width:110px; height:110px; border-radius:50%; margin:0 auto 18px; position:relative; overflow:hidden;
+      border:3px solid rgba(255,255,255,.65);
+      box-shadow:0 15px 35px rgba(102,126,234,.35);
+      background:linear-gradient(135deg,#667eea,#764ba2); /* fallback if image fails to load */
+    }
+    .founder-avatar img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    /* Remove shiny overlay so photos stay crisp */
+
+    .founder-avatar img[alt="Photo of Enhong Liu"] {
+      object-position: 20% 60%; /* shift left (20%) and down (60%) */
+      }
+
+    .founder-avatar::before{ display:none; }
+
+    .founder-name{
+      font-size:24px; font-weight:700; margin-bottom:8px;
+      background:linear-gradient(135deg,#ffffff,#94a3b8);
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    }
+    .founder-title{
+      font-size:16px; color:#8ea0b8; font-weight:500; text-transform:uppercase; letter-spacing:1px;
+    }
+
+    /* Corner decorations */
+    .corner-decoration{ position:absolute; width:300px; height:300px; opacity:.1; filter:blur(60px); }
+    .corner-top{ top:-150px; right:-150px; background:radial-gradient(circle,#667eea,transparent); }
+    .corner-bottom{ bottom:-150px; left:-150px; background:radial-gradient(circle,#f093fb,transparent); }
+
+    /* Footer */
+    .footer{
+      position:absolute; bottom:40px; left:0; right:0; text-align:center;
+      color:#64748b; font-size:14px; letter-spacing:3px; text-transform:uppercase;
+      opacity:0; animation:fadeIn 1s ease 1.2s forwards;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Background effects -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Particles -->
+    <div class="particles">
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+      <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+    </div>
+
+    <!-- Corner decorations -->
+    <div class="corner-decoration corner-top"></div>
+    <div class="corner-decoration corner-bottom"></div>
+
+    <div class="content">
+      <!-- LOGO: swap in your image -->
+      <div class="logo-container">
+        <div class="logo-frame">
+          <img class="logo-img" src="assets/LOGO.png" alt="Dr. KnAI Logo"/>
+        </div>
+      </div>
+
+      <h1 class="company-name">Dr. KnAI</h1>
+
+      <!-- TAGLINE (bigger & readable) -->
+      <div class="tagline-container">
+        <p class="tagline">
+          Make Pet AI <span class="highlight">Accelerated Safely</span>
+        </p>
+      </div>
+
+      <!-- FOUNDERS (photos) -->
+      <div class="founders">
+        <div class="founder">
+          <div class="founder-avatar">
+            <img src="assets/enhong-liu.jpg" alt="Photo of Enhong Liu" style="object-fit:cover; object-position:35% 10%;" />
+          </div>
+          <div class="founder-name">Enhong Liu</div>
+          <div class="founder-title">Co-Founder</div>
+        </div>
+        <div class="founder">
+          <div class="founder-avatar">
+            <img src="assets/haiyu-yang.jpg" alt="Photo of Haiyu Yang"/>
+          </div>
+          <div class="founder-name">Haiyu Yang</div>
+          <div class="founder-title">Co-Founder</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Pre-Seed Pitch Deck</div>
+  </div>
+</body>
+</html>

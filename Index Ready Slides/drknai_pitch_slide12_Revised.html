@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. KnAI - Current Status</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0e27;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .slide-container {
+            width: 1920px;
+            height: 1080px;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated background elements */
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .glow-1 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, #667eea, transparent);
+            top: -400px;
+            right: -400px;
+        }
+        
+        .glow-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #f093fb, transparent);
+            bottom: -300px;
+            left: -300px;
+            animation-delay: -10s;
+        }
+        
+        .glow-3 {
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, #10b981, transparent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -5s;
+            opacity: 0.2;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        /* Grid overlay */
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 10s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Logo corner */
+        .logo-corner img{width:100%;height:100%;object-fit:contain}
+        .logo-corner {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(102, 126, 234, 0.1);
+            backdrop-filter: blur(10px);
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        /* Main content */
+        .content {
+            padding: 80px 80px 80px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .slide-title {
+            font-size: 56px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            opacity: 0;
+            animation: fadeInDown 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Main container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Technology section */
+        .technology-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: slideIn 0.8s ease forwards;
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+        
+        .section-title {
+            font-size: 34px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Technology stack cards */
+        .tech-stack {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .tech-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            opacity: 0;
+            animation: scaleIn 0.6s ease forwards;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .tech-card:nth-child(1) { animation-delay: 0.5s; }
+        .tech-card:nth-child(2) { animation-delay: 0.6s; }
+        .tech-card:nth-child(3) { animation-delay: 0.7s; }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2);
+        }
+        
+        .tech-card::after {
+            content: '✓';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tech-card:nth-child(1) .tech-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .tech-card:nth-child(2) .tech-icon { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .tech-card:nth-child(3) .tech-icon { background: linear-gradient(135deg, #10b981, #06b6d4); }
+        
+        .tech-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s ease-in-out infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .tech-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+        
+        .tech-description {
+            font-size: 20px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        
+        /* Models card specific styling */
+        .models-list {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .model-item {
+            font-size: 20px;
+            color: #94a3b8;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 3px solid rgba(16, 185, 129, 0.5);
+        }
+
+        .model-name {
+            font-weight: 700;       /* bold */
+            font-size: 24px;        /* bigger than default 14px */
+            color: #cbd5e1;         /* optional: make more visible */
+        }
+        
+        /* Progress section */
+        .progress-section {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .progress-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 10px 20px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 1.0s;
+            width: 100%;
+            /* max-width: 800px; */
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .progress-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .progress-stages {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .progress-line {
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(102, 126, 234, 0.2);
+            z-index: 0;
+        }
+        
+        .progress-fill {
+            position: absolute;
+            top: 25px;
+            left: 0;
+            width: 25%;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+            z-index: 1;
+            animation: growLine 2s ease-out forwards;
+            animation-delay: 1.2s;
+        }
+        
+        @keyframes growLine {
+            from { width: 0; }
+            to { width: 25%; }
+        }
+        
+        .progress-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .stage-dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #1a1f3a;
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .stage-dot.complete {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            border-color: #10b981;
+            color: white;
+            animation: popIn 0.5s ease forwards;
+            animation-delay: 1.4s;
+            opacity: 0;
+        }
+        
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .stage-label {
+            font-size: 24px;
+            color: #94a3b8;
+            text-align: center;
+            max-width: 100px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background effects -->
+        <div class="bg-glow glow-1"></div>
+        <div class="bg-glow glow-2"></div>
+        <div class="bg-glow glow-3"></div>
+        <div class="grid-overlay"></div>
+        
+        <div class="logo-corner">
+        <img src="assets/LOGO.png" alt="Dr. KnAI Logo">
+        </div>
+        
+        <div class="content">
+            <h2 class="slide-title">Current Status</h2>
+            
+            <div class="main-container">
+                <!-- Technology Section -->
+                <div class="technology-section">
+                    <div class="section-header">
+                        <div class="section-title">Technology Readiness</div>
+                    </div>
+                    
+                    <div class="tech-stack">
+                        <div class="tech-card">
+                            <div class="tech-icon">🔗</div>
+                            <div class="tech-name">RAG Pipeline</div>
+                            <div class="tech-description">Foundation for data organization and integration across all veterinary data sources</div>
+                        </div>
+                        
+                        <div class="tech-card">
+                            <div class="tech-icon">🧠</div>
+                            <div class="tech-name">Models</div>
+                            <div class="tech-description">AI model suite for comprehensive analysis</div>
+                            <div class="models-list">
+                                <div class="model-item">👁️ <span class="model-name">PetVision</span> - Image-based insights</div>
+                                <div class="model-item">📝 <span class="model-name">PetText</span> - NLP for records & notes</div>
+                                <div class="model-item">📡 <span class="model-name">PetSensor</span> - Sensor data analytics</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tech-card">
+                            <div class="tech-icon">🤖</div>
+                            <div class="tech-name">Local Mini Agentic Chatbot</div>
+                            <div class="tech-description">Interactive layer for localized decision support - fully operational backend system</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Section -->
+                <div class="progress-section">
+                    <div class="progress-card">
+                        <div class="progress-title">Development Progress</div>
+                        <div class="progress-stages">
+                            <div class="progress-line"></div>
+                            <div class="progress-fill"></div>
+                            
+                            <div class="progress-stage">
+                                <div class="stage-dot complete">✓</div>
+                                <div class="stage-label">Pre-MVP</div>
+                            </div>
+                            
+                            <div class="progress-stage">
+                                <div class="stage-dot">🔄</div>
+                                <div class="stage-label">MVP Built</div>
+                            </div>
+                            
+                            <div class="progress-stage">
+                                <div class="stage-dot">🧪</div>
+                                <div class="stage-label">Pilot Testing</div>
+                            </div>
+                            
+                            <div class="progress-stage">
+                                <div class="stage-dot">🚀</div>
+                                <div class="stage-label">Launch Ready</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
