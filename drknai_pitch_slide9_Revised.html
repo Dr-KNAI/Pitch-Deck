@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. KnAI - Business Model & Pricing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0e27;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .slide-container {
+            width: 1920px;
+            height: 1080px;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated background elements */
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .glow-1 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, #667eea, transparent);
+            top: -400px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .glow-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #f093fb, transparent);
+            bottom: -300px;
+            right: -300px;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        /* Grid overlay */
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 10s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Logo corner */
+        .logo-corner img{width:100%;height:100%;object-fit:contain}
+        .logo-corner {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(102, 126, 234, 0.1);
+            backdrop-filter: blur(10px);
+            font-size: 10px;
+            color: #667eea;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        /* Main content */
+        .content {
+            padding: 120px 80px 60px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .slide-title {
+            font-size: 60px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            opacity: 0;
+            animation: fadeInDown 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Overview banner */
+        .overview-banner {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            opacity: 0;
+            animation: slideIn 0.8s ease forwards;
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .overview-item {
+            text-align: center;
+            position: relative;
+        }
+        
+        .overview-label {
+            font-size: 20px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .overview-value {
+            font-size: 30px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .overview-divider {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, rgba(102, 126, 234, 0.3), transparent);
+        }
+        
+        /* Pricing sections container */
+        .pricing-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        /* Clinics pricing section */
+        .pricing-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .section-header {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 5px;
+        }
+        
+        .section-subtitle {
+            font-size: 20px;
+            color: #94a3b8;
+        }
+        
+        /* Pricing tiers */
+        .pricing-tiers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        .tier-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            animation: scaleIn 0.6s ease forwards;
+        }
+        
+        /* Staggered animations for clinic tiers */
+        .clinics-section .tier-card:nth-child(1) { animation-delay: 0.6s; }
+        .clinics-section .tier-card:nth-child(2) { animation-delay: 0.7s; }
+        .clinics-section .tier-card:nth-child(3) { animation-delay: 0.8s; }
+        .clinics-section .tier-card:nth-child(4) { animation-delay: 0.9s; }
+        
+        /* Staggered animations for enterprise tiers */
+        .enterprise-section .tier-card:nth-child(1) { animation-delay: 1.0s; }
+        .enterprise-section .tier-card:nth-child(2) { animation-delay: 1.1s; }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .tier-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Special styling for freemium */
+        .tier-freemium {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .tier-freemium::before {
+            content: 'FOUNDERS';
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            color: white;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 3px 30px;
+            transform: rotate(45deg);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+        
+        .tier-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+        }
+        
+        .tier-price {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        .tier-freemium .tier-price {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tier-features {
+            font-size: 20px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        
+        .feature-item {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .feature-item::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+        }
+        
+        /* Enterprise pricing models */
+        .enterprise-models {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        .model-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .model-card:hover {
+            transform: translateX(-5px);
+            border-color: rgba(240, 147, 251, 0.5);
+            box-shadow: 0 20px 40px rgba(240, 147, 251, 0.2);
+        }
+        
+        .model-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
+        .model-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+        }
+        
+        .model-price {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        .model-description {
+            font-size: 22px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        
+        /* Animated revenue indicator */
+        .revenue-flow {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 1.3s;
+        }
+        
+        .revenue-arrow {
+            font-size: 24px;
+            color: #10b981;
+            animation: bounce-right 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce-right {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+        
+        .revenue-text {
+            font-size: 14px;
+            color: #10b981;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background effects -->
+        <div class="bg-glow glow-1"></div>
+        <div class="bg-glow glow-2"></div>
+        <div class="grid-overlay"></div>
+        
+        <div class="logo-corner">
+        <img src="assets/LOGO.png" alt="Dr. KnAI Logo">
+        </div>
+        
+        <div class="content">
+            <h2 class="slide-title">Business Model & Pricing Strategy</h2>
+            
+            <!-- Overview banner -->
+            <div class="overview-banner">
+                <div class="overview-item">
+                    <div class="overview-label">Clinics</div>
+                    <div class="overview-value">$0-3K/month</div>
+                </div>
+                <div class="overview-divider"></div>
+                <div class="overview-item">
+                    <div class="overview-label">Enterprise</div>
+                    <div class="overview-value">$500-750K/package</div>
+                </div>
+            </div>
+            
+            <div class="pricing-container">
+                <!-- Clinics Pricing -->
+                <div class="pricing-section clinics-section">
+                    <div class="section-header">
+                        <div class="section-title">Veterinary Clinics</div>
+                        <div class="section-subtitle">Tiered SaaS Model</div>
+                    </div>
+                    
+                    <div class="pricing-tiers">
+                        <div class="tier-card tier-freemium">
+                            <div class="tier-name">Freemium</div>
+                            <div class="tier-price">$0</div>
+                            <div class="tier-features">
+                                <div class="feature-item">10 Founding Clinics</div>
+                                <div class="feature-item">Core Dashboards</div>
+                                <div class="feature-item">Limited Records</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tier-card">
+                            <div class="tier-name">Basic</div>
+                            <div class="tier-price">$300-500 per Month</div>
+                            <div class="tier-features">
+                                <div class="feature-item">Core Dashboards</div>
+                                <div class="feature-item">Standard Support</div>
+                                <div class="feature-item">Basic Analytics</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tier-card">
+                            <div class="tier-name">Pro</div>
+                            <div class="tier-price">$800-1.2K per Month</div>
+                            <div class="tier-features">
+                                <div class="feature-item">Advanced Analytics</div>
+                                <div class="feature-item">EHR Integration</div>
+                                <div class="feature-item">Priority Support</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tier-card">
+                            <div class="tier-name">Max</div>
+                            <div class="tier-price">$2-3K per Month</div>
+                            <div class="tier-features">
+                                <div class="feature-item">Unlimited Users</div>
+                                <div class="feature-item">Full Integrations</div>
+                                <div class="feature-item">White-label Options</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Enterprise Pricing -->
+                <div class="pricing-section enterprise-section">
+                    <div class="section-header">
+                        <div class="section-title">Enterprise Clients</div>
+                        <div class="section-subtitle">Value-Based Pricing</div>
+                    </div>
+                    
+                    <div class="enterprise-models">
+                        <div class="model-card">
+                            <div class="model-name">Performance Model</div>
+                            <div class="model-price">$150-250K base + 15-25% share</div>
+                            <div class="model-description">
+                                License fee plus percentage of verified savings or profit uplift. 
+                                Includes large-scale deployments, custom integrations, dedicated training, 
+                                and 24/7 enterprise support.
+                            </div>
+                        </div>
+                        
+                        <div class="model-card">
+                            <div class="model-name">Fixed Package</div>
+                            <div class="model-price">$500-750K/year</div>
+                            <div class="model-description">
+                                All-inclusive annual package with predictable costs. 
+                                Full platform access, unlimited API calls, custom model training, 
+                                and quarterly business reviews.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Revenue flow indicator
+            <div class="revenue-flow">
+                <span class="revenue-arrow">→</span>
+                <span class="revenue-text">Scalable Revenue Growth</span>
+            </div> -->
+        </div>
+    </div>
+</body>
+</html>

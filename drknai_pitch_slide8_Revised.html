@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. KnAI - Target Customers & Value Props</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0e27;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .slide-container {
+            width: 1920px;
+            height: 1080px;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated background elements */
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .glow-1 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, #667eea, transparent);
+            top: -400px;
+            left: -400px;
+        }
+        
+        .glow-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #f093fb, transparent);
+            bottom: -300px;
+            right: -300px;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        /* Grid overlay */
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 10s linear infinite;
+        }
+        
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Logo corner */
+        
+        .logo-corner img{width:100%;height:100%;object-fit:contain}
+        .logo-corner {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(102, 126, 234, 0.1);
+            backdrop-filter: blur(10px);
+            font-size: 10px;
+            color: #667eea;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        /* Main content */
+        .content {
+            padding: 120px 80px 80px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .slide-title {
+            font-size: 60px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            opacity: 0;
+            animation: fadeInDown 0.8s ease forwards;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Customer segments container */
+        .segments-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        
+        /* Enterprise header */
+        .enterprise-header {
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .enterprise-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .enterprise-subtitle {
+            font-size: 24px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Customer cards grid */
+        .customers-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .customer-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            opacity: 0;
+            animation: scaleIn 0.6s ease forwards;
+        }
+        
+        .customer-card:nth-child(1) { animation-delay: 0.4s; }
+        .customer-card:nth-child(2) { animation-delay: 0.5s; }
+        .customer-card:nth-child(3) { animation-delay: 0.6s; }
+        .customer-card:nth-child(4) { animation-delay: 0.7s; }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .customer-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Insurance card */
+        .card-insurance {
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        .card-insurance:hover {
+            border-color: rgba(239, 68, 68, 0.6);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.3);
+        }
+        
+        .card-insurance .customer-icon {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+        }
+        
+        /* Pharma card */
+        .card-pharma {
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .card-pharma:hover {
+            border-color: rgba(16, 185, 129, 0.6);
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+        }
+        
+        .card-pharma .customer-icon {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+        }
+        
+        /* Pet Tech card */
+        .card-tech {
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+        
+        .card-tech:hover {
+            border-color: rgba(139, 92, 246, 0.6);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+        
+        .card-tech .customer-icon {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        }
+        
+        /* Pet Food card */
+        .card-food {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        
+        .card-food:hover {
+            border-color: rgba(245, 158, 11, 0.6);
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+        }
+        
+        .card-food .customer-icon {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+        
+        .customer-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .customer-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s ease-in-out infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .customer-name {
+            font-size: 36px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+        
+        .customer-value {
+            font-size: 24px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .customer-subname {
+            font-size: 24px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+        
+        .customer-subvalue {
+            font-size: 18px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .value-metric {
+            font-size: 28px;
+            font-weight: 800;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .card-insurance .value-metric {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-pharma .value-metric {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-tech .value-metric {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-food .value-metric {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Value creation section */
+        .value-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .value-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards;
+        }
+        
+        .value-card:nth-child(1) { animation-delay: 0.9s; }
+        .value-card:nth-child(2) { animation-delay: 1.0s; }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), transparent);
+        }
+        
+        .value-insurance {
+            --accent-color: #ef4444;
+        }
+        
+        .value-others {
+            --accent-color: #667eea;
+        }
+        
+        .value-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .value-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .value-insurance .value-icon {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+        }
+        
+        .value-others .value-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .value-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #cbd5e1;
+        }
+        
+        .value-content {
+            font-size: 20px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        
+        .value-highlight {
+            display: block;
+            font-size: 32px;
+            font-weight: 800;
+            margin: 20px 0 10px;
+        }
+        
+        .value-insurance .value-highlight {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .value-others .value-highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .value-detail {
+            font-size: 20px;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        /* Animated dollar signs */
+        .dollar-particle {
+            position: absolute;
+            color: #10b981;
+            font-size: 20px;
+            font-weight: 700;
+            opacity: 0;
+            animation: float-up 4s ease-in-out infinite;
+        }
+        
+        @keyframes float-up {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+        }
+        
+        .dollar-1 { right: 10%; top: 30%; animation-delay: 0s; }
+        .dollar-2 { right: 20%; top: 50%; animation-delay: 1s; }
+        .dollar-3 { right: 15%; top: 70%; animation-delay: 2s; }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background effects -->
+        <div class="bg-glow glow-1"></div>
+        <div class="bg-glow glow-2"></div>
+        <div class="grid-overlay"></div>
+        
+        <!-- Floating dollar signs -->
+        <div class="dollar-particle dollar-1">$</div>
+        <div class="dollar-particle dollar-2">$</div>
+        <div class="dollar-particle dollar-3">$</div>
+        
+        <div class="logo-corner">
+        <img src="assets/LOGO.png" alt="Dr. KnAI Logo">
+        </div>
+        
+        <div class="content">
+            <h2 class="slide-title">Target Customers & Value Propositions</h2>
+            
+            <div class="segments-container">
+                <!-- Enterprise header -->
+                <div class="enterprise-header">
+                    <div class="enterprise-title">Enterprise Customers in the Pet Industry</div>
+                    <div class="enterprise-subtitle">Four Key Verticals</div>
+                </div>
+                
+                <!-- Customer cards -->
+                <div class="customers-grid">
+                    <div class="customer-card card-insurance">
+                        <div class="customer-icon">🛡️</div>
+                        <div class="customer-name">Pet Insurance</div>
+                        <div class="customer-value">
+                            Fraud detection & claims automation
+                            <span class="value-metric">$7-87M Saved</span>
+                        </div>
+                    </div>
+                    
+                    <div class="customer-card card-pharma">
+                        <div class="customer-icon">💊</div>
+                        <div class="customer-subname">Pharma</div>
+                        <div class="customer-subvalue">
+                            Clinical trials & efficacy tracking
+                        </div>
+                    </div>
+                    
+                    <div class="customer-card card-tech">
+                        <div class="customer-icon">📱</div>
+                        <div class="customer-subname">Pet Tech</div>
+                        <div class="customer-subvalue">
+                            Smart device AI & health insights
+                        </div>
+                    </div>
+                    
+                    <div class="customer-card card-food">
+                        <div class="customer-icon">🥫</div>
+                        <div class="customer-subname">Pet Food</div>
+                        <div class="customer-subvalue">
+                            Personalized nutrition & tracking
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Value creation details -->
+                <div class="value-section">
+                    <div class="value-card value-insurance">
+                        <div class="value-header">
+                            <div class="value-icon">💰</div>
+                            <div class="value-title">Insurance Value Creation</div>
+                        </div>
+                        <div class="value-content">
+                            <span class="value-highlight">$7-87M per Company</span>
+                            <div class="value-detail">Based on market share & fraud rates</div>
+                            Automated fraud detection reduces false claims by 50%, while AI-powered claim processing cuts review time by 70%
+                        </div>
+                    </div>
+                    
+                    <div class="value-card value-others">
+                        <div class="value-header">
+                            <div class="value-icon">🚀</div>
+                            <div class="value-title">Cross-Vertical Impact</div>
+                        </div>
+                        <div class="value-content">
+                            <span class="value-highlight">Faster Time-to-Market</span>
+                            <div class="value-detail">Better data → Accelerated launches → Higher profits</div>
+                            Comprehensive data enables rapid product development, early market entry, and competitive pricing advantages
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

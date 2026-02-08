@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. KnAI - Data + Model Flywheel</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+      background:#0a0e27;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    }
+    .slide-container{
+      width:1920px;height:1080px;position:relative;overflow:hidden;
+      background:linear-gradient(135deg,#0a0e27 0%,#1a1f3a 100%);
+    }
+
+    /* Background */
+    .bg-glow{position:absolute;border-radius:50%;filter:blur(100px);opacity:.30;animation:float 20s ease-in-out infinite;}
+    .glow-1{width:800px;height:800px;background:radial-gradient(circle,#667eea,transparent);top:-400px;left:-400px;}
+    .glow-2{width:600px;height:600px;background:radial-gradient(circle,#f093fb,transparent);bottom:-300px;right:-300px;animation-delay:-10s;}
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.9)}}
+    .grid-overlay{
+      position:absolute;inset:0;background-image:
+        linear-gradient(rgba(102,126,234,.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(102,126,234,.03) 1px,transparent 1px);
+      background-size:50px 50px;animation:grid-move 10s linear infinite;
+    }
+    @keyframes grid-move{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
+
+    /* Corner logo */
+    .logo-corner{
+      position:absolute;top:40px;left:60px;width:60px;height:60px;border-radius:16px;
+      background:rgba(102,126,234,.10);backdrop-filter:blur(10px);border:2px solid rgba(102,126,234,.5);
+      display:flex;align-items:center;justify-content:center;z-index:10;overflow:hidden;
+    }
+    .logo-corner img{width:100%;height:100%;object-fit:contain}
+
+    .content{padding:120px 80px 80px;height:100%;display:flex;flex-direction:column;position:relative;z-index:5}
+
+    .slide-title{
+      font-size:56px;font-weight:800;text-align:center;margin-bottom:60px;
+      background:linear-gradient(135deg,#ffffff 0%,#94a3b8 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+      text-transform:uppercase;letter-spacing:3px;opacity:0;animation:fadeInDown .8s ease forwards;
+    }
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Flywheel */
+    .flywheel-container{flex:1;display:flex;align-items:center;justify-content:center;position:relative;}
+    .flywheel{width:600px;height:600px;position:relative;opacity:0;animation:scaleIn 1s ease .3s forwards;}
+    @keyframes scaleIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+    .flywheel-circle{position:absolute;inset:0;border:3px solid rgba(102,126,234,.2);border-radius:50%;animation:rotate 30s linear infinite;z-index:0;}
+    @keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+    /* Phase nodes */
+    .phase-node{
+      position:absolute;width:230px;height:230px;padding:26px;border-radius:24px;
+      background:rgba(255,255,255,.04);backdrop-filter:blur(20px);
+      border:2px solid rgba(255,255,255,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+      transition:transform .35s cubic-bezier(.175,.885,.32,1.275), box-shadow .35s;
+      cursor:pointer;opacity:0;animation:fadeInScale .8s ease forwards;z-index:3;overflow:visible;
+    }
+    @keyframes fadeInScale{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+    .phase-node:hover{transform:scale(1.08);box-shadow:0 20px 40px rgba(0,0,0,.35)}
+
+    /* Positions */
+    /* 1) Data Acquisition – centered above hub */
+    .phase-1{
+      top:-14px; left:calc(50% - 115px);
+      background:linear-gradient(135deg,rgba(102,126,234,.14),rgba(102,126,234,.07)); border-color:rgba(102,126,234,.55);
+      animation-delay:.5s;
+    }
+    /* 2) Foundation Models – moved further right, aligned horizontally with #3 */
+    .phase-2{
+      right:-150px; bottom:60px;          /* ← moved right; aligned via same bottom */
+      background:linear-gradient(135deg,rgba(118,75,162,.14),rgba(118,75,162,.07)); border-color:rgba(118,75,162,.55);
+      animation-delay:.7s;
+    }
+    /* 3) Monetization – moved further left, aligned horizontally with #2 */
+    .phase-3{
+      left:-150px; bottom:60px;           /* ← moved left; aligned via same bottom */
+      background:linear-gradient(135deg,rgba(240,147,251,.14),rgba(240,147,251,.07)); border-color:rgba(240,147,251,.55);
+      animation-delay:.9s;
+    }
+
+    /* Big step numbers */
+    .phase-number{
+      position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+      width:78px;height:78px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:34px;font-weight:900;color:#fff;border:4px solid rgba(255,255,255,.55);
+      box-shadow:0 18px 32px rgba(0,0,0,.45); z-index:10;
+    }
+    .phase-1 .phase-number{background:linear-gradient(135deg,#6e80ff,#7e58c9);box-shadow:0 16px 32px rgba(102,126,234,.55)}
+    .phase-2 .phase-number{background:linear-gradient(135deg,#7a57c6,#8b5cf6);box-shadow:0 16px 32px rgba(118,75,162,.55)}
+    .phase-3 .phase-number{background:linear-gradient(135deg,#fb9bf6,#f5576c);box-shadow:0 16px 32px rgba(240,147,251,.55)}
+    .phase-number::before{
+      content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+      background:linear-gradient(45deg,transparent,rgba(255,255,255,.35),transparent);animation:shine 3s linear infinite;
+    }
+    @keyframes shine{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+    /* Bigger text inside cards */
+    .phase-title{font-size:24px;font-weight:900;color:#e5e7eb;margin-top:26px;margin-bottom:10px;letter-spacing:.3px;}
+    .phase-description{font-size:18px;line-height:1.45;color:#b6c2d1;}
+
+    /* Arrows (kept below cards) */
+    .arrow-container{position:absolute;inset:0;pointer-events:none;z-index:1;}
+    .arrow-path{stroke:rgba(102,126,234,.3);stroke-width:2;fill:none;stroke-dasharray:10 5;animation:dash 2s linear infinite}
+    @keyframes dash{to{stroke-dashoffset:-15}}
+    .arrow-head{fill:rgba(102,126,234,.5);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+    /* Center hub */
+    /* .center-hub{
+      position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:150px;height:150px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(102,126,234,.2),rgba(118,75,162,.2));
+      border:3px solid rgba(102,126,234,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;
+      box-shadow:0 0 60px rgba(102,126,234,.4), inset 0 0 30px rgba(102,126,234,.2);animation:pulse-glow 3s ease-in-out infinite;z-index:2;
+    }
+    @keyframes pulse-glow{0%,100%{box-shadow:0 0 60px rgba(102,126,234,.4),inset 0 0 30px rgba(102,126,234,.2)}50%{box-shadow:0 0 80px rgba(102,126,234,.6),inset 0 0 40px rgba(102,126,234,.3)}}
+    .hub-logo{font-size:32px;font-weight:900;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:5px}
+    .hub-text{font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px} */
+
+    .center-hub {
+      position: absolute;
+      left: 50%;
+      top: 58%;
+      transform: translate(-50%, -50%);
+      width: 180px; /* slightly bigger */
+      height: 180px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(102,126,234,.3), rgba(118,75,162,.3));
+      border: 4px solid rgba(102,126,234,.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 80px rgba(102,126,234,.5), 
+                  inset 0 0 40px rgba(102,126,234,.3);
+      animation: pulse-glow 3s ease-in-out infinite, rotate-hub 20s linear infinite;
+      z-index: 5;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 80px rgba(102,126,234,.5), inset 0 0 40px rgba(102,126,234,.3); }
+      50% { box-shadow: 0 0 120px rgba(118,75,162,.7), inset 0 0 60px rgba(118,75,162,.4); }
+    }
+
+    /* @keyframes rotate-hub {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    } */
+
+    .hub-logo {
+      font-size: 40px; /* bigger */
+      font-weight: 900;
+      background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+      animation: shineText 5s linear infinite;
+      text-shadow: 0 0 16px rgba(102,126,234,0.6), 0 0 28px rgba(118,75,162,0.5);
+    }
+
+    @keyframes shineText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .hub-text {
+      font-size: 18px; /* bigger */
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(102,126,234,0.5);
+    }
+
+
+    /* Monetization hint */
+    .monetization-hint{
+      position:absolute;bottom:90px;left:50%;transform:translateX(-50%);
+      background:rgba(255,255,255,.02);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);
+      border-radius:10px;padding:25px 100px;opacity:0;animation:slideUp .8s ease 1.2s forwards;
+    }
+    @keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+    .monetization-text{font-size:20px;color:#bbcde7}
+    .monetization-targets{color:#acb2ba;font-weight:600}
+
+    /* Orbiting particles */
+    .particle{position:absolute;width:4px;height:4px;background:#667eea;border-radius:50%;opacity:.6;animation:orbit-particle 20s linear infinite}
+    @keyframes orbit-particle{from{transform:rotate(0) translateX(250px) rotate(0)}to{transform:rotate(360deg) translateX(250px) rotate(-360deg)}}
+    .particle:nth-child(1){animation-delay:0s}
+    .particle:nth-child(2){animation-delay:5s;background:#764ba2}
+    .particle:nth-child(3){animation-delay:10s;background:#f093fb}
+    .particle:nth-child(4){animation-delay:15s;background:#f5576c}
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Background -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Corner logo -->
+    <div class="logo-corner">
+      <img src="assets/LOGO.png" alt="Dr. KnAI Logo"/>
+    </div>
+
+    <div class="content">
+      <h2 class="slide-title">How It Works: The Data + Model Flywheel</h2>
+
+      <div class="flywheel-container">
+        <div class="flywheel">
+          <!-- Rotating circle -->
+          <div class="flywheel-circle"></div>
+
+          <!-- Arrows (kept as-is) -->
+          <svg class="arrow-container" viewBox="0 0 600 600">
+            <!-- 1 → 2 -->
+            <path class="arrow-path" d="M 300 120 Q 480 300 420 420" />
+            <polygon class="arrow-head" points="415,415 425,420 420,410" />
+            <!-- 2 → 3 -->
+            <path class="arrow-path" d="M 380 450 Q 300 500 180 450" />
+            <polygon class="arrow-head" points="185,455 175,450 185,445" />
+            <!-- 3 → 1 -->
+            <path class="arrow-path" d="M 180 420 Q 120 300 300 120" />
+            <polygon class="arrow-head" points="295,125 305,120 300,130" />
+          </svg>
+
+          <!-- Phase 1 -->
+          <div class="phase-node phase-1">
+            <div class="phase-number">1</div>
+            <div class="phase-title">Data Acquisition</div>
+            <div class="phase-description">Free tools to clinics → Collect multi-modal pet data</div>
+          </div>
+
+          <!-- Phase 2 (right) -->
+          <div class="phase-node phase-2">
+            <div class="phase-number">2</div>
+            <div class="phase-title">Foundation Models</div>
+            <div class="phase-description">Build & train PetVision, PetSound, PetSense, PetText</div>
+          </div>
+
+          <!-- Phase 3 (left) -->
+          <div class="phase-node phase-3">
+            <div class="phase-number">3</div>
+            <div class="phase-title">Monetization</div>
+            <div class="phase-description">Deploy models → Generate revenue → Fund expansion</div>
+          </div>
+
+          <!-- Center hub -->
+          <div class="center-hub">
+            <div class="hub-logo">Dr. KnAI</div>
+            <div class="hub-text">Flywheel</div>
+          </div>
+
+          <!-- Particles -->
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </div>
+
+      <!-- Monetization hint -->
+      <div class="monetization-hint">
+        <div class="monetization-text">
+          Phase 3 Revenue Streams:
+          <span class="monetization-targets">Clinics • Insurance Companies • Pharma • Pet Tech </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

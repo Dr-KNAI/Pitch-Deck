@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. KnAI - Data Platform & AI Models</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+      background:#0a0e27;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    }
+    .slide-container{width:1920px;height:1080px;position:relative;overflow:hidden;
+      background:linear-gradient(135deg,#0a0e27 0%,#1a1f3a 100%);}
+
+    /* Background */
+    .bg-glow{position:absolute;border-radius:50%;filter:blur(100px);opacity:.30;animation:float 20s ease-in-out infinite}
+    .glow-1{width:800px;height:800px;background:radial-gradient(circle,#667eea,transparent);top:-400px;left:-400px}
+    .glow-2{width:600px;height:600px;background:radial-gradient(circle,#f093fb,transparent);bottom:-300px;right:-300px;animation-delay:-10s}
+    .glow-3{width:700px;height:700px;background:radial-gradient(circle,#10b981,transparent);bottom:-350px;left:50%;transform:translateX(-50%);animation-delay:-5s;opacity:.2}
+    @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.9)}}
+    .grid-overlay{position:absolute;inset:0;background-image:
+      linear-gradient(rgba(102,126,234,.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(102,126,234,.03) 1px,transparent 1px);
+      background-size:50px 50px;animation:grid-move 10s linear infinite}
+    @keyframes grid-move{0%{transform:translate(0,0)}100%{transform:translate(50px,50px)}}
+
+    /* Corner logo */
+    .logo-corner{position:absolute;top:40px;left:60px;width:60px;height:60px;border:2px solid rgba(102,126,234,.5);
+      border-radius:16px;display:flex;align-items:center;justify-content:center;background:rgba(102,126,234,.1);
+      backdrop-filter:blur(10px);z-index:10;overflow:hidden}
+    .logo-corner img{width:100%;height:100%;object-fit:contain}
+
+    /* Main content */
+    .content{padding:88px 52px 52px;height:100%;display:flex;flex-direction:column;position:relative;z-index:5}
+    .slide-title{
+      font-size:52px;font-weight:900;text-align:center;margin-bottom:20px;
+      background:linear-gradient(135deg,#ffffff 0%,#94a3b8 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;letter-spacing:3px;
+      opacity:0;animation:fadeInDown .8s ease forwards
+    }
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Layout */
+    .main-layout{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto;gap:20px;position:relative}
+
+    .section-header{text-align:center;margin-bottom:4px}
+    .section-title{font-size:22px;font-weight:900;color:#a5b4fc;text-transform:uppercase;letter-spacing:2px}
+
+    /* LEFT – Data Pipeline */
+    .data-section{display:flex;flex-direction:column;gap:10px;padding-right:8px;opacity:0;animation:slideInLeft .8s ease .25s forwards}
+    @keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+    .box{background:rgba(255,255,255,.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.14);
+      border-radius:14px;padding:14px;text-align:center}
+    .box-strong{border:2px solid rgba(102,126,234,.35)}
+    .title-strong{font-size:24px;font-weight:900;background:linear-gradient(135deg,#9db2ff,#c4a7ff);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+    .sub{font-size:16px;color:#c8d2df}
+    .mini{font-size:15px;color:#b7c2d1}
+
+    .scattered-data{padding:14px;border-radius:14px}
+    .data-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .data-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px;display:flex;align-items:center;gap:10px}
+    .data-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+    .icon-vision{background:linear-gradient(135deg,#667eea,#764ba2)}
+    .icon-audio{background:linear-gradient(135deg,#764ba2,#8b5cf6)}
+    .icon-medical{background:linear-gradient(135deg,#f093fb,#f5576c)}
+    .icon-sensor{background:linear-gradient(135deg,#10b981,#06b6d4)}
+    .icon-text{background:linear-gradient(135deg,#f59e0b,#f97316)}
+    .data-label{font-size:18px;color:#e8ecf3;font-weight:800}
+
+    .processing-step{background:linear-gradient(135deg,rgba(102,126,234,.12),rgba(118,75,162,.12));border:2px solid rgba(102,126,234,.35)}
+    .aligned-data{border:2px solid rgba(102,126,234,.35)}
+    .aligned-title{font-size:24px;font-weight:900;background:linear-gradient(135deg,#9db2ff,#c4a7ff);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+    .aligned-description{font-size:16px;color:#c8d2df;line-height:1.35}
+
+    .stack{display:flex;flex-direction:column;gap:8px}
+    .arrow-inline{position:static;margin:2px auto 0 auto;font-size:42px;color:#a5b4ff;font-weight:900;text-shadow:0 0 10px rgba(102,126,234,.9),0 0 20px rgba(118,75,162,.6)}
+
+    /* RIGHT – AI Development (bigger) */
+    .models-section{display:flex;flex-direction:column;gap:10px;padding-left:8px;opacity:0;animation:slideInRight .8s ease .35s forwards}
+    @keyframes slideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+
+    .models-container{background:rgba(255,255,255,.02);backdrop-filter:blur(20px);border:2px solid rgba(255,255,255,.14);
+      border-radius:16px;padding:22px;flex:1;display:flex;flex-direction:column}
+    .models-header{text-align:center;margin-bottom:14px}
+    .models-title{font-size:28px;font-weight:1000;letter-spacing:.3px;background:linear-gradient(135deg,#667eea,#764ba2,#f093fb);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+    .models-grid{display:flex;flex-direction:column;gap:14px;flex:1}
+    .model-category{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px}
+    .category-title{font-size:20px;font-weight:900;color:#a5b4fc;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+    .model-items{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .model-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:12px;
+      padding:14px 12px;min-height:56px;font-size:18px;font-weight:800;color:#eef2ff;text-align:center}
+
+    /* BOTTOM – Enterprise Clients */
+    .clients-section{grid-column:1/-1;background:linear-gradient(135deg,rgba(16,185,129,.09),rgba(6,182,212,.09));
+      backdrop-filter:blur(20px);border:2px solid rgba(16,185,129,.35);border-radius:20px;padding:28px 34px;
+      opacity:0;animation:slideUp .6s ease .45s forwards}
+    @keyframes slideUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+    .clients-content{text-align:center}
+    .clients-title{font-size:28px;font-weight:1000;background:linear-gradient(135deg,#10b981,#06b6d4);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:14px; margin-left: -300px;}
+    .clients-list{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1200px;margin:0 auto}
+    .client-item{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 12px;font-size:18px;color:#e5fff7;font-weight:800}
+    .client-item-large {background:rgba(255,255,255,.04);border:3px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 20px;font-size:24px;color:#e5fff7;font-weight:900}
+    .divider {width: auto; height: 0px; background: rgba(255,255,255,.1); margin: 0px auto;}
+ 
+    /* Overlay ARROWS */
+    .arrow{position:absolute;color:#a5b4ff;font-weight:900;text-shadow:0 0 10px rgba(102,126,234,.9),0 0 20px rgba(118,75,162,.6);
+      opacity:0;animation:fadeIn .5s ease forwards}
+    @keyframes fadeIn{to{opacity:1}}
+
+    /* Middle: Masked & Aligned → AI Models */
+    .arrow-right{top:11%;left:50%;transform:translate(-50%,-50%);font-size:88px;animation-delay:.55s}
+
+    /* RIGHT SIDE (inside AI box, above its bottom, asymmetric to left arrow) */
+    .arrow-down-to-clients{
+      /* place within the AI column, below Application APIs but above clients */
+      top: 70.5%;    /* tweak +/- 1–2% if needed for your screen */
+      right:22.5%;            /* offset to the right for asymmetry */
+      font-size:76px;
+      animation-delay:.65s;
+    }
+
+    /* LEFT SIDE: Clients → Data Modalities */
+    .arrow-up-from-clients{left:22.5%;bottom:160px;font-size:76px;animation-delay:.65s}
+  </style>
+</head>
+<body>
+  <div class="slide-container">
+    <!-- Background -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+    <div class="bg-glow glow-3"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="logo-corner">
+      <img src="assets/LOGO.png" alt="Dr. KnAI Logo"/>
+    </div>
+
+    <div class="content">
+      <h2 class="slide-title">Unified Data Platform & AI Model Architecture</h2>
+
+      <div class="main-layout">
+        <!-- LEFT: Data Pipeline -->
+        <div class="data-section">
+          <div class="section-header"><div class="section-title">Data Pipeline</div></div>
+
+          <div class="stack">
+            <div class="box box-strong aligned-data">
+              <div class="aligned-title">Masked & Aligned<br/>Multimodal Data</div>
+              <div class="aligned-description">Privacy-protected, standardized, synchronized dataset</div>
+            </div>
+
+            <div class="arrow-inline">↑</div>
+
+            <div class="box processing-step">
+              <div class="title-strong">Data Cleaning & Alignment</div>
+              <div class="mini">Privacy-Preserving Processing</div>
+            </div>
+
+            <div class="arrow-inline">↑</div>
+
+            <div class="box scattered-data">
+              <div class="title-strong" style="margin-bottom:8px">Multimodal Data</div>
+              <div class="data-grid">
+                <div class="data-item"><div class="data-icon icon-vision">👁️</div><div class="data-label">Vision</div></div>
+                <div class="data-item"><div class="data-icon icon-audio">🔊</div><div class="data-label">Audio</div></div>
+                <div class="data-item"><div class="data-icon icon-medical">🏥</div><div class="data-label">Medical</div></div>
+                <div class="data-item"><div class="data-icon icon-sensor">📡</div><div class="data-label">Sensors</div></div>
+                <div class="data-item"><div class="data-icon icon-text">📝</div><div class="data-label">Text</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: AI Development -->
+        <div class="models-section">
+          <div class="section-header"><div class="section-title">AI Development</div></div>
+
+          <div class="models-container" id="models">
+            <!-- <div class="models-header"><div class="models-title">AI Models Building & Improvement</div></div> -->
+
+            <div class="models-grid">
+              <div class="model-category">
+                <div class="category-title">Foundation Models</div>
+                <div class="model-items">
+                  <div class="model-item">Core ML Architecture</div>
+                  <div class="model-item">Transfer Learning</div>
+                </div>
+              </div>
+
+              <div class="model-category">
+                <div class="category-title">Specialized Models</div>
+                <div class="model-items">
+                  <div class="model-item">🎯 PetVision</div>
+                  <div class="model-item">📈 PetSense</div>
+                  <div class="model-item">🎵 PetSound</div>
+                  <div class="model-item">💬 PetText</div>
+                </div>
+              </div>
+
+              <div class="model-category">
+                <div class="category-title">Application APIs</div>
+                <div class="model-items">
+                  <div class="model-item">Health Scoring API</div>
+                  <div class="model-item">Risk Modeling</div>
+                  <div class="model-item">Claim Verification</div>
+                  <div class="model-item">Predictive Analytics</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM: Enterprise Clients -->
+        <div class="clients-section" id="clients">
+          <div class="clients-content">
+            <div class="clients-title">Enterprise Clients</div>
+            <div class="clients-list">
+              <div class="client-item-large">Veterinary Clinics</div>
+              <div class="divider"></div>
+              <div class="client-item">Pet Insurance Companies</div>
+              <div class="client-item">Pet Pharma, Food, Tech Firms</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overlay ARROWS -->
+        <!-- Masked & Aligned → AI Models -->
+        <div class="arrow arrow-right">➜</div>
+        <!-- AI Development ↓ Enterprise Clients (inside AI column, asymmetric) -->
+        <div class="arrow arrow-down-to-clients">⬇</div>
+        <!-- Enterprise Clients ↑ Data Modalities (left) -->
+        <div class="arrow arrow-up-from-clients">⬆</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
