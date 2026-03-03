@@ -10,17 +10,25 @@
   .hud{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);
        background:rgba(255,255,255,.08);backdrop-filter:blur(10px);
        border:1px solid rgba(255,255,255,.18);color:#e5e7eb;
-       padding:8px 14px;border-radius:999px;font:600 14px system-ui}
-  .btns{position:fixed;right:16px;top:12px;display:flex;gap:8px}
+       padding:8px 14px;border-radius:999px;font:600 14px system-ui;z-index:20}
+  .btns{position:fixed;right:16px;top:12px;display:flex;gap:8px;z-index:20}
   .btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
        color:#e5e7eb;border-radius:10px;padding:8px 10px;cursor:pointer}
   .btn:active{transform:translateY(1px)}
-  .click-zone {
-    position: fixed; top: 0; bottom: 40px; width: 35%;
-    z-index: 10; cursor: pointer;
-  }
-  #zone-prev { left: 0; }
-  #zone-next { right: 0; }
+  .click-zone{position:fixed;top:0;bottom:40px;width:35%;z-index:10;cursor:pointer;}
+  #zone-prev{left:0;}
+  #zone-next{right:0;}
+  .arrow{position:fixed;top:50%;transform:translateY(-50%);
+         z-index:20;cursor:pointer;
+         background:rgba(255,255,255,.10);backdrop-filter:blur(8px);
+         border:1px solid rgba(255,255,255,.22);border-radius:50%;
+         width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+         color:#e5e7eb;font-size:22px;transition:background .2s,transform .2s;
+         user-select:none;}
+  .arrow:hover{background:rgba(255,255,255,.22);transform:translateY(-50%) scale(1.1);}
+  .arrow:active{transform:translateY(-50%) scale(0.95);}
+  #arrow-prev{left:16px;}
+  #arrow-next{right:16px;}
 </style>
 </head>
 <body>
@@ -33,9 +41,10 @@
   <div class="hud" id="hud">1 / N</div>
   <div class="click-zone" id="zone-prev"></div>
   <div class="click-zone" id="zone-next"></div>
+  <div class="arrow" id="arrow-prev">&#8592;</div>
+  <div class="arrow" id="arrow-next">&#8594;</div>
 
 <script>
-  // 1) List your slide files here (order matters)
   const slides = [
     "drknai_pitch_slide1_Revised.html",
     "drknai_pitch_slide2_Revised.html",
@@ -61,9 +70,8 @@
 
   function show(n){
     i = Math.max(0, Math.min(slides.length-1, n));
-    stage.src = slides[i] + (slides[i].includes("?") ? "&" : "?") + "t=" + Date.now(); // bust cache
+    stage.src = slides[i] + (slides[i].includes("?") ? "&" : "?") + "t=" + Date.now();
     hud.textContent = `${i+1} / ${slides.length}`;
-    // prefetch next/prev
     [i+1, i-1].forEach(j=>{
       if (j>=0 && j<slides.length){
         const l = document.createElement("link");
@@ -75,7 +83,6 @@
   function next(){ show(i+1); }
   function prev(){ show(i-1); }
 
-  // Keyboard controls
   window.addEventListener("keydown", (e)=>{
     const k = e.key;
     if (["ArrowRight","PageDown"," "].includes(k)){ e.preventDefault(); next(); }
@@ -87,19 +94,21 @@
     if (k==="?"){ alert("←/PageUp = previous\n→/Space/PageDown = next\nHome/End = first/last\nF = fullscreen\nR = reload current"); }
   });
 
-  // Buttons
   document.getElementById("fs").onclick = ()=>toggleFS();
   document.getElementById("reload").onclick = ()=>stage.contentWindow?.location.reload();
   document.getElementById("help").onclick = ()=>alert("←/PageUp = previous\n→/Space/PageDown = next\nHome/End = first/last\nF = fullscreen\nR = reload current");
-  document.getElementById("zone-prev").onclick = () => prev();
-  document.getElementById("zone-next").onclick = () => next();
+
+  document.getElementById("zone-prev").onclick = ()=>prev();
+  document.getElementById("zone-next").onclick = ()=>next();
+  document.getElementById("arrow-prev").onclick = ()=>prev();
+  document.getElementById("arrow-next").onclick = ()=>next();
+
   function toggleFS(){
     const el = document.documentElement;
     if (!document.fullscreenElement){ el.requestFullscreen?.(); }
     else { document.exitFullscreen?.(); }
   }
 
-  // Start
   show(0);
 </script>
 </body>
