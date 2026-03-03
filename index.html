@@ -15,6 +15,12 @@
   .btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
        color:#e5e7eb;border-radius:10px;padding:8px 10px;cursor:pointer}
   .btn:active{transform:translateY(1px)}
+  .click-zone {
+    position: fixed; top: 0; bottom: 40px; width: 35%;
+    z-index: 10; cursor: pointer;
+  }
+  #zone-prev { left: 0; }
+  #zone-next { right: 0; }
 </style>
 </head>
 <body>
@@ -25,6 +31,8 @@
     <button class="btn" id="help">Help (?)</button>
   </div>
   <div class="hud" id="hud">1 / N</div>
+  <div class="click-zone" id="zone-prev"></div>
+  <div class="click-zone" id="zone-next"></div>
 
 <script>
   // 1) List your slide files here (order matters)
@@ -83,7 +91,8 @@
   document.getElementById("fs").onclick = ()=>toggleFS();
   document.getElementById("reload").onclick = ()=>stage.contentWindow?.location.reload();
   document.getElementById("help").onclick = ()=>alert("←/PageUp = previous\n→/Space/PageDown = next\nHome/End = first/last\nF = fullscreen\nR = reload current");
-
+  document.getElementById("zone-prev").onclick = () => prev();
+  document.getElementById("zone-next").onclick = () => next();
   function toggleFS(){
     const el = document.documentElement;
     if (!document.fullscreenElement){ el.requestFullscreen?.(); }
